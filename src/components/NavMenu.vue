@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">打金系列工具</a>
       <button
@@ -19,9 +19,10 @@
             <router-link class="nav-link" to="/">小助手钱包格式化</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/address_batch_creator"
-              >钱包批量生成</router-link
-            >
+            <router-link class="nav-link" to="/address_batch_creator">钱包&私钥批量生成</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/address_batch_creator2">助记词钱包批量生成</router-link>
           </li>
         </ul>
       </div>
@@ -33,7 +34,7 @@
 export default {
   name: 'NavMenu',
   props: {},
-};
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

@@ -12,17 +12,19 @@
 </template>
 
 <script>
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import NavMenu from './components/NavMenu'
 
 export default {
   name: 'App',
-  components: {},
+  components: {
+    NavMenu,
+  },
   data() {
-    return {};
+    return {}
   },
   methods: {},
-};
+}
 </script>
 
 <style>
