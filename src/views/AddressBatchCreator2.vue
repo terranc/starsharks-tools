@@ -7,8 +7,11 @@
         <el-form-item label="你的助记词" prop="mnemonic" :rules="[{ required: true, message: '请输入助记词' }]">
           <el-input v-model="formData.mnemonic" :autosize="{ minRows: 8, maxRows: 15 }" type="textarea"></el-input>
         </el-form-item>
+        <el-form-item label="起始序号:" prop="start" :rules="[{ required: true, message: '数量不能为空' }]">
+          <el-input v-model="formData.start" type="number"></el-input>
+        </el-form-item>
         <el-form-item label="生成数量:" prop="num" :rules="[{ required: true, message: '数量不能为空' }]">
-          <el-input v-model="formData.num" type="number" placeholder="数量" @keyup.native="keyupEvent()"></el-input>
+          <el-input v-model="formData.num" type="number"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="createAddress" :loading="loading">一键生成</el-button>
@@ -28,7 +31,7 @@ let bip39 = require('bip39')
 let { hdkey } = require('ethereumjs-wallet')
 let util = require('ethereumjs-util')
 import moment from 'moment'
-batch(2)
+
 export default {
   name: 'AddressBatchCreator2',
   components: {},
@@ -40,6 +43,7 @@ export default {
       formData: {
         num: 20,
         mnemonic: '',
+        start: 0,
       },
       json_fields: {
         序号: 'index',
@@ -48,9 +52,6 @@ export default {
     }
   },
   methods: {
-    keyupEvent() {
-      this.formData.num = this.formData.num.replace(/^(0+)|[^\d]+/g, '')
-    },
     createAddress() {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
@@ -65,12 +66,13 @@ export default {
       })
     },
     newAddress() {
+      let dataArr = []
       let seed = bip39.mnemonicToSeedSync(this.formData.mnemonic)
       let hdWallet = hdkey.fromMasterSeed(seed)
 
       console.log('助记词:' + this.formData.mnemonic)
 
-      for (let i = 0; i < 0 + this.formData.num; i++) {
+      for (let i = this.formData.start; i < parseInt(this.formData.start) + parseInt(this.formData.num); i++) {
         let key = hdWallet.derivePath(`m/44'/60'/0'/0/${i}`)
         let address = util.toChecksumAddress('0x' + util.pubToAddress(key._hdkey._publicKey, true).toString('hex'))
         console.log('地址:' + address)
@@ -81,6 +83,10 @@ export default {
       }
       this.loading = false
       this.tableData = dataArr
+    },
+    resetForm() {
+      this.formData.start = null
+      this.$refs.ruleForm.resetFields()
     },
   },
 }
