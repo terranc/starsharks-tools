@@ -19,5 +19,10 @@ export default () =>
         name: 'AddressBatchCreator2',
         component: () => import('./views/AddressBatchCreator2.vue'),
       },
+      {
+        path: '/get_sea_in_game',
+        name: 'GetSeaInGame',
+        component: () => import('./views/GetSeaInGame.vue'),
+      },
     ],
   })

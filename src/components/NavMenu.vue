@@ -24,6 +24,9 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/address_batch_creator2">助记词钱包批量生成</router-link>
           </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/get_sea_in_game">获取游戏内SEA余额</router-link>
+          </li>
         </ul>
       </div>
     </div>
