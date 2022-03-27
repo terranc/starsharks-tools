@@ -77,7 +77,7 @@ export default {
         let address = util.toChecksumAddress('0x' + util.pubToAddress(key._hdkey._publicKey, true).toString('hex'))
         console.log('地址:' + address)
         dataArr[i] = {
-          index: i + 1,
+          index: parseInt(i) + 1,
           address,
         }
       }
