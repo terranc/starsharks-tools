@@ -2,7 +2,7 @@
   <h3>钱包&私钥批量生成</h3>
   <el-alert title="可断网离线生成" type="success" class="mb-3" />
   <el-container>
-    <el-header>
+    <el-main>
       <el-form :inline="true" :model="formData" ref="ruleForm">
         <el-form-item label="生成数量:" prop="num" :rules="[{ required: true, message: '数量不能为空' }]">
           <el-input v-model="formData.num" type="number" placeholder="数量" @keyup.native="keyupEvent()"></el-input>
@@ -11,21 +11,7 @@
           <el-button type="primary" @click="createAddress" :loading="loading">一键生成</el-button>
           <el-button type="danger" @click="resetForm('ruleForm')" :disabled="loading">重置表单</el-button>
         </el-form-item>
-        <el-form-item>
-          <download-excel
-            class="export-excel-wrapper"
-            :data="tableData"
-            :fields="json_fields"
-            title="BSC钱包批量生成"
-            :name="fileName"
-          >
-            <el-button type="success">导出EXCEL</el-button>
-          </download-excel>
-          <!-- moment().format();-->
-        </el-form-item>
       </el-form>
-    </el-header>
-    <el-main>
       <el-table :data="tableData" stripe style="width: 100%">
         <el-table-column prop="index" label="序号" width="80"> </el-table-column>
         <el-table-column prop="address" label="地址"> </el-table-column>

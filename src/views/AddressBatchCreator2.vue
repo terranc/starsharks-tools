@@ -2,7 +2,7 @@
   <h3>助记词钱包批量生成</h3>
   <el-alert title="可断网离线生成" type="success" class="mb-3" />
   <el-container>
-    <el-header>
+    <el-main>
       <el-form :model="formData" ref="ruleForm" label-width="120px">
         <el-form-item label="你的助记词" prop="mnemonic" :rules="[{ required: true, message: '请输入助记词' }]">
           <el-input v-model="formData.mnemonic" :autosize="{ minRows: 8, maxRows: 15 }" type="textarea"></el-input>
@@ -14,21 +14,7 @@
           <el-button type="primary" @click="createAddress" :loading="loading">一键生成</el-button>
           <el-button type="danger" @click="resetForm('ruleForm')" :disabled="loading">重置表单</el-button>
         </el-form-item>
-        <el-form-item>
-          <download-excel
-            class="export-excel-wrapper"
-            :data="tableData"
-            :fields="json_fields"
-            title="BSC钱包批量生成"
-            :name="fileName"
-          >
-            <el-button type="success">导出EXCEL</el-button>
-          </download-excel>
-          <!-- moment().format();-->
-        </el-form-item>
       </el-form>
-    </el-header>
-    <el-main>
       <el-table :data="tableData" stripe style="width: 100%">
         <el-table-column prop="index" label="序号" width="80"> </el-table-column>
         <el-table-column prop="address" label="地址"> </el-table-column>
@@ -38,7 +24,11 @@
 </template>
 <script>
 let ethers = require('ethers')
+let bip39 = require('bip39')
+let { hdkey } = require('ethereumjs-wallet')
+let util = require('ethereumjs-util')
 import moment from 'moment'
+batch(2)
 export default {
   name: 'AddressBatchCreator2',
   components: {},
@@ -61,17 +51,36 @@ export default {
     keyupEvent() {
       this.formData.num = this.formData.num.replace(/^(0+)|[^\d]+/g, '')
     },
-    batch(count, startIndex = 0) {
+    createAddress() {
+      this.$refs.ruleForm.validate((valid) => {
+        if (valid) {
+          this.loading = true
+          setTimeout(() => {
+            this.newAddress()
+          }, 500)
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    newAddress() {
       let seed = bip39.mnemonicToSeedSync(this.formData.mnemonic)
       let hdWallet = hdkey.fromMasterSeed(seed)
 
       console.log('助记词:' + this.formData.mnemonic)
 
-      for (let i = startIndex; i < startIndex + count; i++) {
+      for (let i = 0; i < 0 + this.formData.num; i++) {
         let key = hdWallet.derivePath(`m/44'/60'/0'/0/${i}`)
         let address = util.toChecksumAddress('0x' + util.pubToAddress(key._hdkey._publicKey, true).toString('hex'))
         console.log('地址:' + address)
+        dataArr[i] = {
+          index: i + 1,
+          address,
+        }
       }
+      this.loading = false
+      this.tableData = dataArr
     },
   },
 }
