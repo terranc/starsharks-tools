@@ -5,7 +5,7 @@ const AddressBatchCreator = {
   template: require('./components/AddressBatchCreator.vue'),
 };
 
-const routes = [
+export default [
   { path: '/', component: AddressFormator },
   { path: '/address_batch_creator', component: AddressBatchCreator },
 ];
