@@ -50,8 +50,8 @@ export default {
         let group = this.formData.initGroupIndex
         addresses.forEach((item, index) => {
           formatAddresses.push({
-            address: item,
-            alias: index + this.formData.initAddressIndex + '_' + group + '_' + item.slice(-4),
+            address: item.toLocaleLowerCase(),
+            alias: index + this.formData.initAddressIndex + '_' + group + '_' + item.toLocaleLowerCase().slice(-4),
             cooling: this.formData.isCooling,
           })
           if ((index + this.formData.initAddressIndex) % 3 === 0) group++
