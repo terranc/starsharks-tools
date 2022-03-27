@@ -71,8 +71,8 @@ export default {
       let hdWallet = hdkey.fromMasterSeed(seed)
 
       console.log('助记词:' + this.formData.mnemonic)
-
-      for (let i = this.formData.start; i < parseInt(this.formData.start) + parseInt(this.formData.num); i++) {
+      let end = parseInt(this.formData.start) + parseInt(this.formData.num)
+      for (let i = this.formData.start; i < end; i++) {
         let key = hdWallet.derivePath(`m/44'/60'/0'/0/${i}`)
         let address = util.toChecksumAddress('0x' + util.pubToAddress(key._hdkey._publicKey, true).toString('hex'))
         console.log('地址:' + address)
