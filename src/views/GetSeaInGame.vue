@@ -10,7 +10,7 @@
       ></el-input>
     </el-form-item>
     <el-form-item label="SESSION TOKEN" prop="session" :rules="[{ required: true, message: '请输入...' }]">
-      <el-input v-model="formData.session" :autosize="{ minRows: 8, maxRows: 15 }" type="textarea"></el-input>
+      <el-input v-model="formData.session" :autosize="{ minRows: 4, maxRows: 15 }" type="textarea"></el-input>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submit">获取余额</el-button>
