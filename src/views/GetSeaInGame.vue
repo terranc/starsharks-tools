@@ -1,17 +1,17 @@
 <template>
   <h3>获取游戏内SEA余额</h3>
   <el-form :model="formData" ref="ruleForm" label-width="150px">
-    <el-form-item label="SESSION TOKEN" prop="session" :rules="[{ required: true, message: '请输入...' }]">
-      <el-input v-model="formData.session" :autosize="{ minRows: 8, maxRows: 15 }" type="textarea"></el-input>
-    </el-form-item>
-    <!-- <el-form-item label="白名单" prop="address" :rules="[{ required: false, message: '请输入...' }]">
+    <el-form-item label="地址清单" prop="addresses" :rules="[{ required: true, message: '请输入...' }]">
       <el-input
-        v-model="formData.address"
+        v-model="formData.addresses"
         :autosize="{ minRows: 8, maxRows: 15 }"
         type="textarea"
         placeholder="（每行一个地址）"
       ></el-input>
-    </el-form-item> -->
+    </el-form-item>
+    <el-form-item label="SESSION TOKEN" prop="session" :rules="[{ required: true, message: '请输入...' }]">
+      <el-input v-model="formData.session" :autosize="{ minRows: 8, maxRows: 15 }" type="textarea"></el-input>
+    </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submit">获取余额</el-button>
     </el-form-item>
@@ -34,7 +34,7 @@ export default {
       loading: false,
       formData: {
         session: '',
-        address: '',
+        addresses: localStorage.getItem('MY_ADDRESS'),
       },
       tableData: [],
       json_fields: {
@@ -59,12 +59,12 @@ export default {
     },
     getBalance() {
       let dataArr = []
+      localStorage.setItem('MY_ADDRESS', this.formData.addresses)
+      let addresses = this.formData.addresses.split('\n')
       let sessionJson = JSON.parse(this.formData.session)
-      this.loading = false
-      this.tableData = dataArr
-      Object.entries(sessionJson).forEach(([address, data], index) => {
+      addresses.forEach((address, index) => {
         dataArr[index] = {
-          address: address.substring(0, 6) + '...' + address.slice(-4),
+          address: address.substring(0, 8) + '...' + address.slice(-4),
           balance: 'loading...',
         }
         axios({
@@ -73,7 +73,7 @@ export default {
           responseType: 'json', // default
           headers: {
             'Content-Type': 'application/json',
-            Authorization: data.authorization,
+            Authorization: sessionJson[address] && sessionJson[address].authorization,
           },
         }).then(({ data }) => {
           if (data.code === 0) {
@@ -81,6 +81,8 @@ export default {
           }
         })
       })
+      this.loading = false
+      this.tableData = dataArr
     },
   },
 }
