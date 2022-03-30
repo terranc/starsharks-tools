@@ -10,25 +10,34 @@
       ></el-input>
     </el-form-item>
     <el-form-item label="SESSION TOKEN" prop="session" :rules="[{ required: true, message: '请输入...' }]">
-      <el-input v-model="formData.session" :autosize="{ minRows: 4, maxRows: 15 }" type="textarea"></el-input>
+      <el-input v-model="formData.session" :autosize="{ minRows: 4, maxRows: 6 }" type="textarea"></el-input>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submit">获取余额</el-button>
     </el-form-item>
     <div class="mb-3" v-if="tableData.length > 0">
       <h4>结果</h4>
-      <el-table :data="tableData" stripe style="width: 100%">
+      <el-table :data="tableData" stripe style="width: 100%" show-summary @header-click="copyBalance">
         <el-table-column prop="address" label="钱包"> </el-table-column>
-        <el-table-column prop="balance" label="余额"> </el-table-column>
+        <el-table-column prop="balance" label="余额">
+          <template #header
+            >余额 <el-icon><document-copy /></el-icon
+          ></template>
+        </el-table-column>
       </el-table>
     </div>
   </el-form>
 </template>
 <script>
 import axios from 'axios'
+import copy from 'copy-text-to-clipboard'
+import { DocumentCopy } from '@element-plus/icons-vue'
+
 export default {
   name: 'GetSeaInGame',
-  components: {},
+  components: {
+    DocumentCopy,
+  },
   data() {
     return {
       loading: false,
@@ -44,6 +53,18 @@ export default {
     }
   },
   methods: {
+    copyBalance(col, e) {
+      let balance = this.tableData.reduce((prev, curr) => {
+        let v = parseFloat(curr['balance'])
+        if (!isNaN(v)) {
+          return prev.concat(v)
+        } else {
+          return prev.concat(0)
+        }
+      }, [])
+      copy(balance.join('\n'))
+      this.$message.success('Copy success!')
+    },
     submit() {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
