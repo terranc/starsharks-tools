@@ -21,7 +21,7 @@
         <el-table-column prop="address" label="钱包"> </el-table-column>
         <el-table-column prop="balance" label="余额">
           <template #header
-            >余额 <el-icon size="100"><DocumentCopy /></el-icon
+            >余额 <el-icon size="20"><DocumentCopy /></el-icon
           ></template>
         </el-table-column>
       </el-table>
@@ -31,7 +31,7 @@
 <script>
 import axios from 'axios'
 import copy from 'copy-text-to-clipboard'
-import { DocumentCopy } from '@element-plus/icons-vue'
+import { DocumentCopy } from '@element-plus/icons'
 
 export default {
   name: 'GetSeaInGame',
