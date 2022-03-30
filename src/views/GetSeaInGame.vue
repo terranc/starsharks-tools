@@ -21,7 +21,7 @@
         <el-table-column prop="address" label="钱包"> </el-table-column>
         <el-table-column prop="balance" label="余额">
           <template #header
-            >余额 <el-icon><document-copy /></el-icon
+            >余额 <el-icon size="100"><DocumentCopy /></el-icon
           ></template>
         </el-table-column>
       </el-table>
